@@ -2,41 +2,13 @@ const FILE_TYPES = ['bmp', 'gif', 'jpg', 'jpeg', 'png'];
 const REGULAR_HASHTAG = /#[0-9A-Za-zА-Яа-яЁё]{1-19}/;
 
 // Получение элементов формы
-
 const formElement = document.querySelector('.img-upload__form');
 const imgInputElement = document.querySelector('.img-upload__input');
 const editFormElement = document.querySelector('.img-upload__overlay');
 const resetButtonElement = document.querySelector('#upload-cancel');
 const imgPreviewElement = document.querySelector('.img-upload__preview img');
 const hashtagInputElement = document.querySelector('.text__hashtags');
-
-
-// Показать форму редактирования
-imgInputElement.addEventListener('change', () => {
-  editFormElement.classList.remove('hidden');
-  document.body.classList.add('.modal-open');
-});
-
-// Скрыть форму
-formElement.addEventListener('reset', () => {
-  editFormElement.classList.add('hidden');
-  document.body.classList.remove('.modal-open');
-});
-
-// Загрузка и отображение изображений
-
-/** Являеться ли файл допустимого типа*/
-const isImageFile = (file) => {
-  const fileName = file.name.toLowerCase();
-  return FILE_TYPES.some((it) => fileName.endsWith(it));
-};
-
-imgInputElement.addEventListener('change', () => {
-  const file = imgInputElement.files[0];
-  if (isImageFile(file)) {
-    imgPreviewElement.src = URL.createObjectURL(file);
-  }
-});
+const commentInputElement = document.querySelector('.text__description');
 
 // Инициализация валидации с помощью библиатеки Pristine
 const pristine = new Pristine(formElement, {
@@ -44,7 +16,6 @@ const pristine = new Pristine(formElement, {
   errorTextParent: 'img-upload__field-wrapper',
   errorTextClass: 'ad-form__error'
 });
-
 
 // Валидация хештегов
 const regular = /^#[0-9A-Za-zА-Яа-яЁё]{1,19}$/;//
@@ -68,12 +39,51 @@ pristine.addValidator(hashtagInputElement, (value) => {
   return result;
 }, () => errorHashtagMessage);
 
-
-
 // Блокировка отправки данных если валидация не пройдена
 formElement.addEventListener('submit', (evt) => {
   if (!pristine.validate()) {
     evt.preventDefault();
+  }
+});
+
+// Обработчики событий
+const onClickResetButton = () => hideForm();
+const onKeydownEscape = (evt) => {
+  if (evt.key === 'Escape' && evt.target !== hashtagInputElement && evt.target !== commentInputElement) {
+    hideForm();
+  }
+};
+
+// Показать форму редактирования
+const showForm = () => {
+  editFormElement.classList.remove('hidden');
+  document.body.classList.add('.modal-open');
+  resetButtonElement.addEventListener('click', onClickResetButton);
+  window.addEventListener('keydown', onKeydownEscape);
+};
+
+// Сбросить и скрыть форму
+const hideForm = () => {
+  editFormElement.classList.add('hidden');
+  document.body.classList.remove('.modal-open');
+  resetButtonElement.removeEventListener('click', onClickResetButton);
+  window.removeEventListener('kеydown', onKeydownEscape);
+  formElement.reset();
+  pristine.reset();
+};
+
+/** Являеться ли файл допустимого типа*/
+const isImageFile = (file) => {
+  const fileName = file.name.toLowerCase();
+  return FILE_TYPES.some((it) => fileName.endsWith(it));
+};
+
+// Добавление события для отображения формы
+imgInputElement.addEventListener('change', () => {
+  const file = imgInputElement.files[0];
+  if (isImageFile(file)) {
+    imgPreviewElement.src = URL.createObjectURL(file);
+    showForm();
   }
 });
 

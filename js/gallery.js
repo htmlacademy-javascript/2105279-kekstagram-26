@@ -6,10 +6,9 @@ import { showBigPicture } from './big-picture.js';
 let pictureData;
 
 const onClickPreview = (evt) => {
-  const index = evt.target.parentElement.id;
-  console.log(evt.target.parentElement);
-  console.log(index);
-  showBigPicture(pictureData[index]);
+  if (evt.target.tagName === 'IMG') {
+    showBigPicture(pictureData[evt.target.parentElement.id]);
+  }
 };
 
 

@@ -1,3 +1,5 @@
+import { resetEffects, imgPreviewElement } from './effects.js';
+
 const FILE_TYPES = ['bmp', 'gif', 'jpg', 'jpeg', 'png'];
 
 // Получение элементов формы
@@ -5,7 +7,6 @@ const formElement = document.querySelector('.img-upload__form');
 const imgInputElement = document.querySelector('.img-upload__input');
 const editFormElement = document.querySelector('.img-upload__overlay');
 const resetButtonElement = document.querySelector('#upload-cancel');
-const imgPreviewElement = document.querySelector('.img-upload__preview img');
 const hashtagInputElement = document.querySelector('.text__hashtags');
 const commentInputElement = document.querySelector('.text__description');
 
@@ -69,6 +70,7 @@ const hideForm = () => {
   window.removeEventListener('kеydown', onKeydownEscape);
   formElement.reset();
   pristine.reset();
+  resetEffects();
 };
 
 /** Являеться ли файл допустимого типа*/

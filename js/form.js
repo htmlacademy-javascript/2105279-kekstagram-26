@@ -1,4 +1,6 @@
 import { resetEffects, imgPreviewElement } from './effects.js';
+import { sendData } from "./net-api.js";
+import createMessage from './create-message.js';
 
 const FILE_TYPES = ['bmp', 'gif', 'jpg', 'jpeg', 'png'];
 
@@ -39,17 +41,15 @@ pristine.addValidator(hashtagInputElement, (value) => {
   return result;
 }, () => errorHashtagMessage);
 
-// Блокировка отправки данных если валидация не пройдена
-formElement.addEventListener('submit', (evt) => {
-  if (!pristine.validate()) {
-    evt.preventDefault();
-  }
-});
-
 // Обработчики событий
 const onClickResetButton = () => hideForm();
 const onKeydownEscape = (evt) => {
-  if (evt.key === 'Escape' && evt.target !== hashtagInputElement && evt.target !== commentInputElement) {
+  if (
+    evt.key === 'Escape' &&
+    evt.target !== hashtagInputElement &&
+    evt.target !== commentInputElement &&
+    !document.querySelector('.error')
+  ) {
     hideForm();
   }
 };
@@ -89,74 +89,17 @@ imgInputElement.addEventListener('change', () => {
 });
 
 
-/*
-photoChooserElement.addEventListener('change', () => {
-  const file = photoChooserElement.files[0];
-  if (isImageFile(file)) {
-    const newPhoto = document.createElement('img');
-    newPhoto.src = URL.createObjectURL(file);
-    newPhoto.width = 300;
-    photoPreviewElement.innerHTML = '';
-    photoPreviewElement.append(newPhoto);
+// Добавление события для отправки данных
+formElement.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  if (pristine.validate()) {
+    sendData(
+      () => {
+        hideForm();
+        createMessage('#success');
+      },
+      () => createMessage('#error'),
+      new FormData(formElement)
+    );
   }
 });
-
-
-// Подключение и привязка слайдера
-noUiSlider.create(sliderElement, {
-  range: {
-    min: 0,
-    '40%': 5000,
-    '60%': 10000,
-    max: MAX_COST,
-  },
-  padding: [getMinCost(), 0],
-  start: getMinCost(),
-  step: 1,
-  connect: 'lower',
-  format: {
-    to: function (value) {
-      return value.toFixed(0);
-    },
-    from: function (value) {
-      return parseFloat(value);
-    },
-  },
-});
-
-sliderElement.noUiSlider.on('slide', () => {
-  priceHouseElement.value = sliderElement.noUiSlider.get();
-  pristine.validate(priceHouseElement);
-});
-
-priceHouseElement.addEventListener('input', () => {
-  sliderElement.noUiSlider.set(priceHouseElement.value);
-});
-
-/** Добавляет действие к событию для случая успешной валидации */
-/*
-const addEventSubmitToForm = (onSuccess) => {
-  formElement.addEventListener('submit', (evt) => {
-    evt.preventDefault();
-    if (pristine.validate()) {
-      onSuccess(evt);
-    }
-  });
-};
-
-// Получение данных формы
-const getFormData = () => new FormData(formElement);
-
-// Возрат формы и маркера в исходное состояние
-const resetForm = () => {
-  formElement.reset();
-  onImputTypeHouse();
-  onSelectCapacityOption();
-  pristine.reset();
-  resetNewMarker();
-  photoPreviewElement.innerHTML = '';
-  avatarPreviewElement.src = DEFAULT_AVATAR;
-};
-*/
-
-//export { addEventSubmitToForm, getFormData, resetForm };

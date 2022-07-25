@@ -1,7 +1,7 @@
 const createMessage = (selector, onSubmit = () => { }, onRreject = () => { }) => {
   const messageElement = document.querySelector(selector).content.firstElementChild.cloneNode(true);
-  const buttonElement = messageElement.querySelector('.error__button');
-  document.body.prepend(messageElement);
+  const buttonElement = messageElement.querySelector('button');
+  document.body.append(messageElement);
 
   const onClick = (evt) => {
     closeMessage();

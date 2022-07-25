@@ -1,5 +1,4 @@
 const FILE_TYPES = ['bmp', 'gif', 'jpg', 'jpeg', 'png'];
-const REGULAR_HASHTAG = /#[0-9A-Za-zА-Яа-яЁё]{1-19}/;
 
 // Получение элементов формы
 const formElement = document.querySelector('.img-upload__form');
@@ -18,7 +17,7 @@ const pristine = new Pristine(formElement, {
 });
 
 // Валидация хештегов
-const regular = /^#[0-9A-Za-zА-Яа-яЁё]{1,19}$/;//
+const regular = /^#[0-9A-Za-zА-Яа-яЁё]{1,19}$/;
 let errorHashtagMessage = '';
 
 const setErrorMessage = (condition, message) => {

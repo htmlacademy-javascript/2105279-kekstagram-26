@@ -2,6 +2,7 @@ import { getData } from "./net-api.js";
 import createPreviewElement from "./create-preview-element.js";
 import createMessage from './create-message.js';
 import { showBigPicture } from './big-picture.js';
+import { activateFilterForm } from './filters.js';
 
 let pictureData;
 
@@ -27,7 +28,8 @@ const onGetData = () =>
   getData(
     (data) => {
       pictureData = data;
-      showPreviewPicture(data);
+      //     showPreviewPicture(filterData(data));
+      activateFilterForm(showPreviewPicture, data);
     },
     () => createMessage(
       '#error_load',

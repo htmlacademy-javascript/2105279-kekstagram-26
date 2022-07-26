@@ -25,7 +25,7 @@ const showPreviewPicture = (data) => {
   document.querySelector('.pictures').prepend(fragment);
 };
 
-const onGetData = () =>
+const loadData = () =>
   getData(
     (data) => {
       pictureData = data;
@@ -33,7 +33,7 @@ const onGetData = () =>
     },
     () => createMessage(
       '#error_load',
-      onGetData
+      loadData
     ));
 
-onGetData();
+loadData();

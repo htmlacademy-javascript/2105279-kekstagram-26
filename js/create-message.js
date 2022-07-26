@@ -1,4 +1,4 @@
-const createMessage = (selector, onSubmit = () => { }, onRreject = () => { }) => {
+const createMessage = (selector, onSubmit = () => { }, onReject = () => { }) => {
   const messageElement = document.querySelector(selector).content.firstElementChild.cloneNode(true);
   const buttonElement = messageElement.querySelector('button');
   document.body.append(messageElement);
@@ -8,7 +8,7 @@ const createMessage = (selector, onSubmit = () => { }, onRreject = () => { }) =>
     if (evt.target === buttonElement) {
       onSubmit();
     } else {
-      onRreject();
+      onReject();
     }
   };
 
@@ -16,7 +16,7 @@ const createMessage = (selector, onSubmit = () => { }, onRreject = () => { }) =>
     evt.preventDefault();
     if (evt.key === 'Escape') {
       closeMessage();
-      onRreject();
+      onReject();
     }
   };
 

@@ -42,7 +42,11 @@ pristine.addValidator(hashtagInputElement, (value) => {
 }, () => errorHashtagMessage);
 
 // Обработчики событий
-const onClickResetButton = () => hideForm();
+const onClickResetButton = () => {
+  hideForm();
+  resetForm();
+};
+
 const onKeydownEscape = (evt) => {
   if (
     evt.key === 'Escape' &&
@@ -51,6 +55,7 @@ const onKeydownEscape = (evt) => {
     !document.querySelector('.error')
   ) {
     hideForm();
+    resetForm();
   }
 };
 
@@ -62,12 +67,16 @@ const showForm = () => {
   window.addEventListener('keydown', onKeydownEscape);
 };
 
-// Сбросить и скрыть форму
+// Скрыть форму
 const hideForm = () => {
   editFormElement.classList.add('hidden');
   document.body.classList.remove('.modal-open');
   resetButtonElement.removeEventListener('click', onClickResetButton);
   window.removeEventListener('keydown', onKeydownEscape);
+};
+
+// Сбросить форму
+const resetForm = () => {
   formElement.reset();
   pristine.reset();
   resetEffects();
@@ -96,12 +105,12 @@ formElement.addEventListener('submit', (evt) => {
     sendData(
       () => {
         hideForm();
+        resetForm();
         createMessage('#success');
       },
       () => {
-
         hideForm();
-        createMessage('#error', () => imgInputElement.click());
+        createMessage('#error', showForm, showForm);
       },
       new FormData(formElement)
     );

@@ -1,12 +1,31 @@
+const MAX_ADD_COMMENT = 5;
+
 const bigPictureElement = document.querySelector('.big-picture');
 const socialCommentsElement = document.querySelector('.social__comments');
 const resetButtonElement = document.querySelector('#picture-cancel');
+const loadButtonElement = document.querySelector('.social__comments-loader');
+const commentCountElement = document.querySelector('.social__comment-count');
+
+let viewComments;
+let commentElements;
+const onLoadButtonClick = () => {
+  if (viewComments < commentElements.length) {
+    let count = commentElements.length - viewComments;
+    count = count > MAX_ADD_COMMENT ? MAX_ADD_COMMENT : count;
+    while (count--) {
+      socialCommentsElement.append(commentElements[viewComments++]);
+    }
+    commentCountElement.firstChild.remove();
+    commentCountElement.prepend(viewComments + ' из ');
+  };
+};
 
 const onClickReset = () => {
   bigPictureElement.classList.add('hidden');
   document.body.classList.remove('.modal-open');
   resetButtonElement.removeEventListener('click', onClickReset);
   window.removeEventListener('keydown', onKeydownEscape);
+  loadButtonElement.removeEventListener('click', onLoadButtonClick);
 };
 
 const onKeydownEscape = (evt) => {
@@ -20,30 +39,36 @@ const showBigPicture = (picture) => {
   bigPictureElement.querySelector('.likes-count').textContent = picture.likes;
   bigPictureElement.querySelector('.comments-count').textContent = picture.comments.length;
   socialCommentsElement.innerHTML = '';
+  viewComments = 0;
+  commentElements = [];
 
-  picture.comments.forEach((coment) => {
+  picture.comments.forEach((comment) => {
     const element = document.createElement('li');
     element.classList.add('social__comment');
     const img = document.createElement('img');
     img.classList.add('social__picture');
-    img.src = coment.avatar;
-    img.alt = coment.name;
+    img.src = comment.avatar;
+    img.alt = comment.name;
     img.width = 35;
     img.height = 35;
     const text = document.createElement('p');
     text.classList.add('social__text');
-    text.textContent = coment.message;
+    text.textContent = comment.message;
     element.append(img, text);
-    socialCommentsElement.append(element);
+    commentElements.push(element);
   });
 
   bigPictureElement.querySelector('.social__caption').textContent = picture.description;
+  commentCountElement.querySelector('.comments-count').textContent = picture.comments.length;
 
   bigPictureElement.classList.remove('hidden');
   document.body.classList.add('.modal-open');
   resetButtonElement.addEventListener('click', onClickReset);
   window.addEventListener('keydown', onKeydownEscape);
+  loadButtonElement.addEventListener('click', onLoadButtonClick);
+  onLoadButtonClick();
 };
+
 
 
 export { showBigPicture };

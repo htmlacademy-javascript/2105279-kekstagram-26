@@ -6,11 +6,9 @@ const createPreviewElement = (picture) => {
   previewElement.querySelector('.picture__img').src = picture.url;
   previewElement.querySelector('.picture__likes').textContent = picture.likes;
   previewElement.querySelector('.picture__comments').textContent = picture.comments.length;
-  // previewElement.id = index;
+  previewElement.id = picture.id;
   return previewElement;
 };
 
-// Создание массива элементов
-// const createPreviewElements = (data) => data.map(createPreviewElement);
 
 export default createPreviewElement;

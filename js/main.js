@@ -2,7 +2,7 @@
 import { getData } from "./net-api.js";
 import createPreviewElement from "./create-preview-element.js";
 import createMessage from './create-message.js';
-import { showBigPicture } from './big-picture.js';
+import showBigPicture from './big-picture.js';
 import { activateFilterForm } from './filters.js';
 import './form.js';
 
@@ -16,9 +16,8 @@ const onClickPreview = (evt) => {
 
 const showPreviewPicture = (data) => {
   const fragment = document.createDocumentFragment();
-  data.forEach((picture, index) => {
+  data.forEach((picture) => {
     const element = createPreviewElement(picture);
-    element.id = index;
     element.addEventListener('click', onClickPreview);
     fragment.append(element);
   });

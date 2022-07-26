@@ -71,4 +71,4 @@ const showBigPicture = (picture) => {
 
 
 
-export { showBigPicture };
+export default showBigPicture;

@@ -11,6 +11,11 @@ const editFormElement = document.querySelector('.img-upload__overlay');
 const resetButtonElement = document.querySelector('#upload-cancel');
 const hashtagInputElement = document.querySelector('.text__hashtags');
 const commentInputElement = document.querySelector('.text__description');
+const submitButtonElement = document.querySelector('#upload-submit');
+
+// Блокировка разблокировка кнопки отправки изображения
+const disableSubmitButton = () => submitButtonElement.removeAttribute('disable');
+const enableSubmitButton = () => submitButtonElement.setAttribute('disable', '');
 
 // Инициализация валидации с помощью библиотеки Pristine
 const pristine = new Pristine(formElement, {
@@ -102,14 +107,17 @@ imgInputElement.addEventListener('change', () => {
 formElement.addEventListener('submit', (evt) => {
   evt.preventDefault();
   if (pristine.validate()) {
+    disableSubmitButton();
     sendData(
       () => {
         hideForm();
         resetForm();
+        enableSubmitButton();
         createMessage('#success');
       },
       () => {
         hideForm();
+        enableSubmitButton();
         createMessage('#error', showForm, showForm);
       },
       new FormData(formElement)

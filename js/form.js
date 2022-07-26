@@ -12,7 +12,7 @@ const resetButtonElement = document.querySelector('#upload-cancel');
 const hashtagInputElement = document.querySelector('.text__hashtags');
 const commentInputElement = document.querySelector('.text__description');
 
-// Инициализация валидации с помощью библиатеки Pristine
+// Инициализация валидации с помощью библиотеки Pristine
 const pristine = new Pristine(formElement, {
   classTo: 'img-upload__field-wrapper',
   errorTextParent: 'img-upload__field-wrapper',
@@ -67,13 +67,13 @@ const hideForm = () => {
   editFormElement.classList.add('hidden');
   document.body.classList.remove('.modal-open');
   resetButtonElement.removeEventListener('click', onClickResetButton);
-  window.removeEventListener('kеydown', onKeydownEscape);
+  window.removeEventListener('keydown', onKeydownEscape);
   formElement.reset();
   pristine.reset();
   resetEffects();
 };
 
-/** Являеться ли файл допустимого типа*/
+/** Является ли файл допустимого типа*/
 const isImageFile = (file) => {
   const fileName = file.name.toLowerCase();
   return FILE_TYPES.some((it) => fileName.endsWith(it));
@@ -98,7 +98,11 @@ formElement.addEventListener('submit', (evt) => {
         hideForm();
         createMessage('#success');
       },
-      () => createMessage('#error'),
+      () => {
+
+        hideForm();
+        createMessage('#error', () => imgInputElement.click());
+      },
       new FormData(formElement)
     );
   }

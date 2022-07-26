@@ -1,5 +1,5 @@
 import { resetEffects, imgPreviewElement } from './effects.js';
-import { sendData } from "./net-api.js";
+import { sendData } from './net-api.js';
 import createMessage from './create-message.js';
 
 const FILE_TYPES = ['bmp', 'gif', 'jpg', 'jpeg', 'png'];
@@ -60,27 +60,27 @@ const onKeydownEscape = (evt) => {
 };
 
 // Показать форму редактирования
-const showForm = () => {
+function showForm() {
   editFormElement.classList.remove('hidden');
   document.body.classList.add('.modal-open');
   resetButtonElement.addEventListener('click', onClickResetButton);
   window.addEventListener('keydown', onKeydownEscape);
-};
+}
 
 // Скрыть форму
-const hideForm = () => {
+function hideForm() {
   editFormElement.classList.add('hidden');
   document.body.classList.remove('.modal-open');
   resetButtonElement.removeEventListener('click', onClickResetButton);
   window.removeEventListener('keydown', onKeydownEscape);
-};
+}
 
 // Сбросить форму
-const resetForm = () => {
+function resetForm() {
   formElement.reset();
   pristine.reset();
   resetEffects();
-};
+}
 
 /** Является ли файл допустимого типа*/
 const isImageFile = (file) => {

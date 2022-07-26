@@ -1,6 +1,6 @@
 
-import { getData } from "./net-api.js";
-import createPreviewElement from "./create-preview-element.js";
+import { getData } from './net-api.js';
+import createPreviewElement from './create-preview-element.js';
 import createMessage from './create-message.js';
 import showBigPicture from './big-picture.js';
 import { activateFilterForm } from './filters.js';

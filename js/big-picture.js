@@ -6,18 +6,18 @@ const resetButtonElement = document.querySelector('#picture-cancel');
 const loadButtonElement = document.querySelector('.social__comments-loader');
 const commentCountElement = document.querySelector('.social__comment-count');
 
-let viewComments;
+let viewComment;
 let commentElements;
 const onLoadButtonClick = () => {
-  if (viewComments < commentElements.length) {
-    let count = commentElements.length - viewComments;
+  if (viewComment < commentElements.length) {
+    let count = commentElements.length - viewComment;
     count = count > MAX_ADD_COMMENT ? MAX_ADD_COMMENT : count;
     while (count--) {
-      socialCommentsElement.append(commentElements[viewComments++]);
+      socialCommentsElement.append(commentElements[viewComment++]);
     }
     commentCountElement.firstChild.remove();
-    commentCountElement.prepend(viewComments + ' из ');
-  };
+    commentCountElement.prepend(`${viewComment} из `);
+  }
 };
 
 const onClickReset = () => {
@@ -28,18 +28,18 @@ const onClickReset = () => {
   loadButtonElement.removeEventListener('click', onLoadButtonClick);
 };
 
-const onKeydownEscape = (evt) => {
+function onKeydownEscape(evt) {
   if (evt.key === 'Escape') {
     onClickReset();
   }
-};
+}
 
 const showBigPicture = (picture) => {
   bigPictureElement.querySelector('.big-picture__img img').src = picture.url;
   bigPictureElement.querySelector('.likes-count').textContent = picture.likes;
   bigPictureElement.querySelector('.comments-count').textContent = picture.comments.length;
   socialCommentsElement.innerHTML = '';
-  viewComments = 0;
+  viewComment = 0;
   commentElements = [];
 
   picture.comments.forEach((comment) => {
@@ -68,7 +68,5 @@ const showBigPicture = (picture) => {
   loadButtonElement.addEventListener('click', onLoadButtonClick);
   onLoadButtonClick();
 };
-
-
 
 export default showBigPicture;

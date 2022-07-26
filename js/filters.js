@@ -9,7 +9,7 @@ const randomButtonElement = document.querySelector('#filter-random');
 const sortButtonElement = document.querySelector('#filter-discussed');
 
 // Очистка страницы от прошлого вывода
-const removePreviewPicture = () => document.querySelectorAll('.picture').forEach(element => element.remove());
+const removePreviewPicture = () => document.querySelectorAll('.picture').forEach((element) => element.remove());
 const updateStyleButton = (element) => {
   defaultButtonElement.classList.remove('img-filters__button--active');
   randomButtonElement.classList.remove('img-filters__button--active');

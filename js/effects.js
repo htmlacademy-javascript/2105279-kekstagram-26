@@ -84,13 +84,13 @@ noUiSlider.create(sliderElement, {
 let currentEffect = EFFECT_DEFAULT;
 const applyEffect = (effect) => {
   sliderElement.noUiSlider.updateOptions(effectToConfigSlider[effect]);
-  imgPreviewElement.classList.remove('effects__preview--' + currentEffect);
+  imgPreviewElement.classList.remove(`effects__preview--${currentEffect}`);
   imgPreviewElement.style.filter = '';
   if (effect === EFFECT_DEFAULT) {
     sliderElement.classList.add('visually-hidden');
   } else {
     sliderElement.classList.remove('visually-hidden');
-    imgPreviewElement.classList.add('effects__preview--' + effect);
+    imgPreviewElement.classList.add(`effects__preview--${effect}`);
   }
   currentEffect = effect;
 };
@@ -101,23 +101,23 @@ const onSlide = () => {
   effectLevelInputElement.value = value;
   switch (currentEffect) {
     case 'chrome': {
-      imgPreviewElement.style.filter = 'grayscale(' + value + ')';
+      imgPreviewElement.style.filter = `grayscale(${value})`;
       break;
     }
     case 'sepia': {
-      imgPreviewElement.style.filter = 'sepia(' + value + ')';
+      imgPreviewElement.style.filter = `sepia(${value})`;
       break;
     }
     case 'marvin': {
-      imgPreviewElement.style.filter = 'invert(' + value + '%)';
+      imgPreviewElement.style.filter = `invert(${value}%)`;
       break;
     }
     case 'phobos': {
-      imgPreviewElement.style.filter = 'blur(' + value + 'px)';
+      imgPreviewElement.style.filter = `blur(${value}px)`;
       break;
     }
     case 'heat': {
-      imgPreviewElement.style.filter = 'brightness(' + value + ')';
+      imgPreviewElement.style.filter = `brightness(${value})`;
       break;
     }
   }
@@ -135,8 +135,8 @@ let currentScale = SCALE_VALUE_DEFAULT;
 const updateScale = (newValue) => {
   if (newValue >= MIN_SCALE_VALUE && newValue <= MAX_SCALE_VALUE) {
     currentScale = newValue;
-    scaleInputElement.value = newValue + '%';
-    imgPreviewElement.style.transform = 'scale(' + newValue / 100 + ')';
+    scaleInputElement.value = `${newValue}%`;
+    imgPreviewElement.style.transform = `scale(${newValue / 100})`;
   }
 };
 smallerButtonElement.addEventListener('click', () => updateScale(currentScale - SCALE_STEP));

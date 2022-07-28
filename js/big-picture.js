@@ -1,3 +1,5 @@
+import isEscapeKey from './is-escape-key.js';
+
 const MAX_ADD_COMMENT = 5;
 
 const bigPictureElement = document.querySelector('.big-picture');
@@ -33,7 +35,7 @@ const onResetButtonClick = () => {
   }
 };
 
-onWindowKeydown = (evt) => evt.key === 'Escape' ? onResetButtonClick() : '';
+onWindowKeydown = (evt) => isEscapeKey(evt) ? onResetButtonClick() : '';
 
 const showBigPicture = (picture) => {
   bigPictureElement.querySelector('.big-picture__img img').src = picture.url;

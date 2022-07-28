@@ -1,3 +1,5 @@
+import isEscapeKey from './is-escape-key.js';
+
 const createMessage = (selector, onSubmit = () => { }, onReject = () => { }) => {
   const messageElement = document.querySelector(selector).content.firstElementChild.cloneNode(true);
   const buttonElement = messageElement.querySelector('button');
@@ -16,7 +18,7 @@ const createMessage = (selector, onSubmit = () => { }, onReject = () => { }) => 
 
   const onWindowKeydown = (evt) => {
     evt.preventDefault();
-    if (evt.key === 'Escape') {
+    if (isEscapeKey(evt)) {
       closeMessage();
       onReject();
     }

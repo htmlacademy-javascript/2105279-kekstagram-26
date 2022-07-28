@@ -1,6 +1,7 @@
 import { addEventEffect, removeEventEffect, resetEffects, imgPreviewElement } from './effects.js';
 import { sendData } from './net-api.js';
 import createMessage from './create-message.js';
+import isEscapeKey from './is-escape-key.js';
 
 const FILE_TYPES = ['bmp', 'gif', 'jpg', 'jpeg', 'png'];
 
@@ -63,7 +64,7 @@ const onResetButtonClick = () => {
 
 const onWindowKeydown = (evt) => {
   if (
-    evt.key === 'Escape' &&
+    isEscapeKey(evt) &&
     evt.target !== hashtagInputElement &&
     evt.target !== commentInputElement &&
     !document.querySelector('.error')

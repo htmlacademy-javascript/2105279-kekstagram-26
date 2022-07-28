@@ -4,6 +4,9 @@ import createMessage from './create-message.js';
 import isEscapeKey from './is-escape-key.js';
 
 const FILE_TYPES = ['bmp', 'gif', 'jpg', 'jpeg', 'png'];
+const MAX_LENGTH_HASHTAG = 20;
+const MIN_LENGTH_HASHTAG = 2;
+const MAX_AMOUNT_HASHTAG = 5;
 
 // Получение элементов формы
 const formElement = document.querySelector('.img-upload__form');
@@ -26,7 +29,7 @@ const pristine = new Pristine(formElement, {
 });
 
 // Валидация хештегов
-const regular = /^#[0-9A-Za-zА-Яа-яЁё]{1,19}$/;
+const regular = /^#[0-9A-Za-zА-Яа-яЁё]{0,19}$/;
 let errorHashtagMessage = '';
 
 const setErrorMessage = (condition, message) => {
@@ -45,9 +48,9 @@ pristine.addValidator(hashtagInputElement, (value) => {
   let result = true;
   if (value.length) {
     const hashtags = value.split(' ').filter(({ length }) => length);
-    result &= setErrorMessage(hashtags.length > 5, 'Больше 5-ти хештегов нельзя.');
+    result &= setErrorMessage(hashtags.length > MAX_AMOUNT_HASHTAG, `Максимальное число хештегов: ${MAX_AMOUNT_HASHTAG}`);
+    result &= setErrorMessage(!hashtags.every(({ length }) => length > MIN_LENGTH_HASHTAG && length < MAX_LENGTH_HASHTAG), 'Хештег не должен быть пустым или длиннее 20 символов включая #');
     result &= setErrorMessage(!hashtags.every((hashtag) => regular.test(hashtag)), 'Хештег должен начинаться с # и состоять только из букв и чисел.');
-    result &= setErrorMessage(hashtags.every(({ length }) => length < 2 || length > 20), 'Хештег не должен быть пустым или длиннее 20 символов включая #');
     result &= setErrorMessage(verifyRepeat(hashtags), 'Хештеги не должны повторятся');
   }
   return result;

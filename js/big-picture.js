@@ -1,6 +1,8 @@
 import isEscapeKey from './is-escape-key.js';
 
 const MAX_ADD_COMMENT = 5;
+const PREVIEW_IMAGE_WIDTH = 35;
+const PREVIEW_IMAGE_HEIGHT = 35;
 
 const bigPictureElement = document.querySelector('.big-picture');
 const socialCommentsElement = document.querySelector('.social__comments');
@@ -52,8 +54,8 @@ const showBigPicture = (picture) => {
     img.classList.add('social__picture');
     img.src = comment.avatar;
     img.alt = comment.name;
-    img.width = 35;
-    img.height = 35;
+    img.width = PREVIEW_IMAGE_WIDTH;
+    img.height = PREVIEW_IMAGE_HEIGHT;
     const text = document.createElement('p');
     text.classList.add('social__text');
     text.textContent = comment.message;

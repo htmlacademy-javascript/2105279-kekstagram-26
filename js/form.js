@@ -49,7 +49,7 @@ pristine.addValidator(hashtagInputElement, (value) => {
   if (value.length) {
     const hashtags = value.split(' ').filter(({ length }) => length);
     result &= setErrorMessage(hashtags.length > MAX_AMOUNT_HASHTAG, `Максимальное число хештегов: ${MAX_AMOUNT_HASHTAG}`);
-    result &= setErrorMessage(!hashtags.every(({ length }) => length > MIN_LENGTH_HASHTAG && length < MAX_LENGTH_HASHTAG), 'Хештег не должен быть пустым или длиннее 20 символов включая #');
+    result &= setErrorMessage(!hashtags.every(({ length }) => length >= MIN_LENGTH_HASHTAG && length <= MAX_LENGTH_HASHTAG), 'Хештег не должен быть пустым или длиннее 20 символов включая #');
     result &= setErrorMessage(!hashtags.every((hashtag) => regular.test(hashtag)), 'Хештег должен начинаться с # и состоять только из букв и чисел.');
     result &= setErrorMessage(verifyRepeat(hashtags), 'Хештеги не должны повторятся');
   }

@@ -21,21 +21,15 @@ const updateStyleButton = (element) => {
 const filterRandom = (data) => {
   const lengthData = data.length;
   const amount = lengthData > MAX_AMOUNT_PICTURE ? MAX_AMOUNT_PICTURE : lengthData;
-  const indexes = Array.from({ length: lengthData }, (_v, index) => index);
-  const resultIndexes = Array.from({ length: amount }, () => {
-    const index = Math.floor(Math.random() * indexes.length);
-    const result = indexes[index];
-    indexes.splice(index, 1);
-    return result;
-  });
-  return Array.from(resultIndexes, (value) => data[value]);
+  const pictures = data.slice(0);
+  return Array.from({ length: amount }, () => pictures.splice(Math.floor(Math.random() * pictures.length), 1)[0]);
 };
 
-const filterDiscussed = (data) => {
-  const indexes = Array.from(data, (value, index) => [index, value.comments.length]);
-  indexes.sort((a, b) => b[1] - a[1]);
-  return Array.from(data, (_v, index) => data[indexes[index][0]]);
-};
+function filterDiscussed(data) {
+  const pictures = data.slice(0);
+  pictures.sort((a, b) => b.comments.length - a.comments.length);
+  return pictures;
+}
 
 // Активировать форму фильтрации и вывод изображений
 const activateFilterForm = (onUpdate, data) => {

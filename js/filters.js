@@ -18,7 +18,7 @@ const updateStyleButton = (element) => {
 };
 
 // Фильтрация
-const filteredRandom = (data) => {
+const filterRandom = (data) => {
   const lengthData = data.length;
   const amount = lengthData > MAX_AMOUNT_PICTURE ? MAX_AMOUNT_PICTURE : lengthData;
   const indexes = Array.from({ length: lengthData }, (_v, index) => index);
@@ -31,7 +31,7 @@ const filteredRandom = (data) => {
   return Array.from(resultIndexes, (value) => data[value]);
 };
 
-const filteredDiscussed = (data) => {
+const filterDiscussed = (data) => {
   const indexes = Array.from(data, (value, index) => [index, value.comments.length]);
   indexes.sort((a, b) => b[1] - a[1]);
   return Array.from(data, (_v, index) => data[indexes[index][0]]);
@@ -50,12 +50,12 @@ const activateFilterForm = (onUpdate, data) => {
   randomButtonElement.addEventListener('click', debounce(() => {
     updateStyleButton(randomButtonElement);
     removePreviewPicture();
-    onUpdate(filteredRandom(data));
+    onUpdate(filterRandom(data));
   }));
   sortButtonElement.addEventListener('click', debounce(() => {
     updateStyleButton(sortButtonElement);
     removePreviewPicture();
-    onUpdate(filteredDiscussed(data));
+    onUpdate(filterDiscussed(data));
   }));
 };
 

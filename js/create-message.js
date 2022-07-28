@@ -3,6 +3,8 @@ const createMessage = (selector, onSubmit = () => { }, onReject = () => { }) => 
   const buttonElement = messageElement.querySelector('button');
   document.body.append(messageElement);
 
+  let closeMessage = null;
+
   const onButtonClick = (evt) => {
     closeMessage();
     if (evt.target === buttonElement) {
@@ -20,6 +22,15 @@ const createMessage = (selector, onSubmit = () => { }, onReject = () => { }) => 
     }
   };
 
+  closeMessage = () => {
+    window.removeEventListener('click', onButtonClick);
+    window.removeEventListener('keydown', onWindowKeydown);
+    if (buttonElement) {
+      buttonElement.removeEventListener('click', onButtonClick);
+    }
+    messageElement.remove();
+  };
+
   if (buttonElement) {
     buttonElement.addEventListener('click', onButtonClick);
     buttonElement.focus();
@@ -27,14 +38,6 @@ const createMessage = (selector, onSubmit = () => { }, onReject = () => { }) => 
   window.addEventListener('click', onButtonClick);
   window.addEventListener('keydown', onWindowKeydown);
 
-  function closeMessage() {
-    window.removeEventListener('click', onButtonClick);
-    window.removeEventListener('keydown', onWindowKeydown);
-    if (buttonElement) {
-      buttonElement.removeEventListener('click', onButtonClick);
-    }
-    messageElement.remove();
-  }
 };
 
 export default createMessage;

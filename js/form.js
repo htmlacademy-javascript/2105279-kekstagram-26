@@ -53,6 +53,7 @@ pristine.addValidator(hashtagInputElement, (value) => {
 }, () => errorHashtagMessage);
 
 // Сбросить форму
+let hideForm = null;
 const onResetButtonClick = () => {
   hideForm();
   formElement.reset();
@@ -72,22 +73,22 @@ const onWindowKeydown = (evt) => {
 };
 
 // Показать форму редактирования
-function showForm() {
+const showForm = () => {
   editFormElement.classList.remove('hidden');
   document.body.classList.add('.modal-open');
   resetButtonElement.addEventListener('click', onResetButtonClick);
   window.addEventListener('keydown', onWindowKeydown);
   addEventEffect();
-}
+};
 
 // Скрыть форму
-function hideForm() {
+hideForm = () => {
   editFormElement.classList.add('hidden');
   document.body.classList.remove('.modal-open');
   resetButtonElement.removeEventListener('click', onResetButtonClick);
   window.removeEventListener('keydown', onWindowKeydown);
   removeEventEffect();
-}
+};
 
 
 /** Является ли файл допустимого типа*/

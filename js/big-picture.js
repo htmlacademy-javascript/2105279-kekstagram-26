@@ -21,22 +21,19 @@ const onLoadButtonClick = () => {
   }
 };
 
+let onWindowKeydown = null;
 const onResetButtonClick = () => {
   bigPictureElement.classList.add('hidden');
   document.body.classList.remove('.modal-open');
   resetButtonElement.removeEventListener('click', onResetButtonClick);
-  window.removeEventListener('keydown', onKeydownEscapeKeydown);
+  window.removeEventListener('keydown', onWindowKeydown);
   loadButtonElement.removeEventListener('click', onLoadButtonClick);
   if (viewComment === commentElements.length) {
     loadButtonElement.classList.remove('hidden');
   }
 };
 
-function onKeydownEscapeKeydown(evt) {
-  if (evt.key === 'Escape') {
-    onResetButtonClick();
-  }
-}
+onWindowKeydown = (evt) => evt.key === 'Escape' ? onResetButtonClick() : '';
 
 const showBigPicture = (picture) => {
   bigPictureElement.querySelector('.big-picture__img img').src = picture.url;
@@ -68,7 +65,7 @@ const showBigPicture = (picture) => {
   bigPictureElement.classList.remove('hidden');
   document.body.classList.add('.modal-open');
   resetButtonElement.addEventListener('click', onResetButtonClick);
-  window.addEventListener('keydown', onKeydownEscapeKeydown);
+  window.addEventListener('keydown', onWindowKeydown);
   loadButtonElement.addEventListener('click', onLoadButtonClick);
   onLoadButtonClick();
 };

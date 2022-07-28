@@ -18,8 +18,8 @@ const commentInputElement = document.querySelector('.text__description');
 const submitButtonElement = document.querySelector('#upload-submit');
 
 // Блокировка разблокировка кнопки отправки изображения
-const disableSubmitButton = () => submitButtonElement.removeAttribute('disable');
-const enableSubmitButton = () => submitButtonElement.setAttribute('disable', '');
+const disableSubmitButton = () => { submitButtonElement.disabled = true; };
+const enableSubmitButton = () => { submitButtonElement.disabled = false; };
 
 // Инициализация валидации с помощью библиотеки Pristine
 const pristine = new Pristine(formElement, {

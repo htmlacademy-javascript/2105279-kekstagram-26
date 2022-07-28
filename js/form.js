@@ -1,4 +1,4 @@
-import { resetEffects, imgPreviewElement } from './effects.js';
+import { addEventEffect, removeEventEffect, resetEffects, imgPreviewElement } from './effects.js';
 import { sendData } from './net-api.js';
 import createMessage from './create-message.js';
 
@@ -52,10 +52,12 @@ pristine.addValidator(hashtagInputElement, (value) => {
   return result;
 }, () => errorHashtagMessage);
 
-// Обработчики событий
-const onClickResetButton = () => {
+// Сбросить форму
+const onResetButtonClick = () => {
   hideForm();
-  resetForm();
+  formElement.reset();
+  pristine.reset();
+  resetEffects();
 };
 
 const onKeydownEscape = (evt) => {
@@ -65,8 +67,7 @@ const onKeydownEscape = (evt) => {
     evt.target !== commentInputElement &&
     !document.querySelector('.error')
   ) {
-    hideForm();
-    resetForm();
+    onResetButtonClick();
   }
 };
 
@@ -74,24 +75,20 @@ const onKeydownEscape = (evt) => {
 function showForm() {
   editFormElement.classList.remove('hidden');
   document.body.classList.add('.modal-open');
-  resetButtonElement.addEventListener('click', onClickResetButton);
+  resetButtonElement.addEventListener('click', onResetButtonClick);
   window.addEventListener('keydown', onKeydownEscape);
+  addEventEffect();
 }
 
 // Скрыть форму
 function hideForm() {
   editFormElement.classList.add('hidden');
   document.body.classList.remove('.modal-open');
-  resetButtonElement.removeEventListener('click', onClickResetButton);
+  resetButtonElement.removeEventListener('click', onResetButtonClick);
   window.removeEventListener('keydown', onKeydownEscape);
+  removeEventEffect();
 }
 
-// Сбросить форму
-function resetForm() {
-  formElement.reset();
-  pristine.reset();
-  resetEffects();
-}
 
 /** Является ли файл допустимого типа*/
 const isImageFile = (file) => {
@@ -116,8 +113,7 @@ formElement.addEventListener('submit', (evt) => {
     disableSubmitButton();
     sendData(
       () => {
-        hideForm();
-        resetForm();
+        onResetButtonClick();
         enableSubmitButton();
         createMessage('#success');
       },

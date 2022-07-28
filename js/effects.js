@@ -80,8 +80,17 @@ noUiSlider.create(sliderElement, {
   },
 });
 
-// Эффекты
+// Изменение масштаба
+let currentScale = SCALE_VALUE_DEFAULT;
+const updateScale = (newValue) => {
+  if (newValue >= MIN_SCALE_VALUE && newValue <= MAX_SCALE_VALUE) {
+    currentScale = newValue;
+    scaleInputElement.value = `${newValue}%`;
+    imgPreviewElement.style.transform = `scale(${newValue / 100})`;
+  }
+};
 
+// Эффекты
 let currentEffect = EFFECT_DEFAULT;
 const applyEffect = (effect) => {
   sliderElement.noUiSlider.updateOptions(effectToConfigSlider[effect]);
@@ -97,6 +106,7 @@ const applyEffect = (effect) => {
 };
 applyEffect(EFFECT_DEFAULT);
 
+// Обработчики
 const onSlide = () => {
   const value = sliderElement.noUiSlider.get();
   effectLevelInputElement.value = value;
@@ -123,25 +133,31 @@ const onSlide = () => {
     }
   }
 };
-sliderElement.noUiSlider.on('slide', onSlide);
-effectsRadioElements.forEach((element) =>
-  element.addEventListener('change', () => {
-    applyEffect(element.value);
-    onSlide();
-  }));
 
-// Изменение масштаба
-
-let currentScale = SCALE_VALUE_DEFAULT;
-const updateScale = (newValue) => {
-  if (newValue >= MIN_SCALE_VALUE && newValue <= MAX_SCALE_VALUE) {
-    currentScale = newValue;
-    scaleInputElement.value = `${newValue}%`;
-    imgPreviewElement.style.transform = `scale(${newValue / 100})`;
-  }
+const onEffectsRadioChange = (evt) => {
+  applyEffect(evt.target.value);
+  onSlide();
 };
-smallerButtonElement.addEventListener('click', () => updateScale(currentScale - SCALE_STEP));
-biggerButtonElement.addEventListener('click', () => updateScale(currentScale + SCALE_STEP));
+
+const onSmallerButtonClick = () => updateScale(currentScale - SCALE_STEP);
+const onBiggerButtonClick = () => updateScale(currentScale + SCALE_STEP);
+
+
+// Добавление и удаление обработчиков
+const addEventEffect = () => {
+  sliderElement.noUiSlider.on('slide', onSlide);
+  effectsRadioElements.forEach((element) => element.addEventListener('change', onEffectsRadioChange));
+  smallerButtonElement.addEventListener('click', onSmallerButtonClick);
+  biggerButtonElement.addEventListener('click', onBiggerButtonClick);
+};
+
+const removeEventEffect = () => {
+  sliderElement.noUiSlider.off();
+  effectsRadioElements.forEach((element) => element.removeEventListener('change', onEffectsRadioChange));
+  smallerButtonElement.removeEventListener('click', onSmallerButtonClick);
+  biggerButtonElement.removeEventListener('click', onBiggerButtonClick);
+};
+
 
 // Сброс эффектов
 const resetEffects = () => {
@@ -149,4 +165,4 @@ const resetEffects = () => {
   applyEffect(EFFECT_DEFAULT);
 };
 
-export { resetEffects, imgPreviewElement };
+export { addEventEffect, removeEventEffect, resetEffects, imgPreviewElement };

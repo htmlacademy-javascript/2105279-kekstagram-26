@@ -35,6 +35,11 @@ const setErrorMessage = (condition, message) => {
   return !condition;
 };
 
+const verifyRepeat = (hashtags) => {
+  const noRepeatHashtags = new Set(hashtags.map((hashtag) => hashtag.toLowerCase()));
+  return noRepeatHashtags.size !== hashtags.length;
+};
+
 pristine.addValidator(hashtagInputElement, (value) => {
   let result = true;
   if (value.length) {
@@ -42,6 +47,7 @@ pristine.addValidator(hashtagInputElement, (value) => {
     result &= setErrorMessage(hashtags.length > 5, 'Больше 5-ти хештегов нельзя.');
     result &= setErrorMessage(!hashtags.every((hashtag) => regular.test(hashtag)), 'Хештег должен начинаться с # и состоять только из букв и чисел.');
     result &= setErrorMessage(hashtags.every(({ length }) => length < 2 || length > 20), 'Хештег не должен быть пустым или длиннее 20 символов включая #');
+    result &= setErrorMessage(verifyRepeat(hashtags), 'Хештеги не должны повторятся');
   }
   return result;
 }, () => errorHashtagMessage);

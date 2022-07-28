@@ -9,14 +9,15 @@ const commentCountElement = document.querySelector('.social__comment-count');
 let viewComment;
 let commentElements;
 const onLoadButtonClick = () => {
-  if (viewComment < commentElements.length) {
-    let count = commentElements.length - viewComment;
-    count = count > MAX_ADD_COMMENT ? MAX_ADD_COMMENT : count;
-    while (count--) {
-      socialCommentsElement.append(commentElements[viewComment++]);
-    }
-    commentCountElement.firstChild.remove();
-    commentCountElement.prepend(`${viewComment} из `);
+  let count = commentElements.length - viewComment;
+  count = count > MAX_ADD_COMMENT ? MAX_ADD_COMMENT : count;
+  while (count--) {
+    socialCommentsElement.append(commentElements[viewComment++]);
+  }
+  commentCountElement.firstChild.remove();
+  commentCountElement.prepend(`${viewComment} из `);
+  if (viewComment === commentElements.length) {
+    loadButtonElement.classList.add('hidden');
   }
 };
 
@@ -26,6 +27,9 @@ const onClickReset = () => {
   resetButtonElement.removeEventListener('click', onClickReset);
   window.removeEventListener('keydown', onKeydownEscape);
   loadButtonElement.removeEventListener('click', onLoadButtonClick);
+  if (viewComment === commentElements.length) {
+    loadButtonElement.classList.remove('hidden');
+  }
 };
 
 function onKeydownEscape(evt) {

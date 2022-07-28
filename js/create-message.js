@@ -1,11 +1,12 @@
 import isEscapeKey from './is-escape-key.js';
 
+const getTemplateElement = (selector) => document.querySelector(selector).content.firstElementChild;
+let closeMessage = null;
+
 const createMessage = (selector, onSubmit = () => { }, onReject = () => { }) => {
-  const messageElement = document.querySelector(selector).content.firstElementChild.cloneNode(true);
+  const messageElement = getTemplateElement(selector).cloneNode(true);
   const buttonElement = messageElement.querySelector('button');
   document.body.append(messageElement);
-
-  let closeMessage = null;
 
   const onButtonClick = (evt) => {
     closeMessage();

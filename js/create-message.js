@@ -3,7 +3,7 @@ const createMessage = (selector, onSubmit = () => { }, onReject = () => { }) => 
   const buttonElement = messageElement.querySelector('button');
   document.body.append(messageElement);
 
-  const onClick = (evt) => {
+  const onButtonClick = (evt) => {
     closeMessage();
     if (evt.target === buttonElement) {
       onSubmit();
@@ -12,7 +12,7 @@ const createMessage = (selector, onSubmit = () => { }, onReject = () => { }) => 
     }
   };
 
-  const onKeydown = (evt) => {
+  const onWindowKeydown = (evt) => {
     evt.preventDefault();
     if (evt.key === 'Escape') {
       closeMessage();
@@ -21,17 +21,17 @@ const createMessage = (selector, onSubmit = () => { }, onReject = () => { }) => 
   };
 
   if (buttonElement) {
-    buttonElement.addEventListener('click', onClick);
+    buttonElement.addEventListener('click', onButtonClick);
     buttonElement.focus();
   }
-  window.addEventListener('click', onClick);
-  window.addEventListener('keydown', onKeydown);
+  window.addEventListener('click', onButtonClick);
+  window.addEventListener('keydown', onWindowKeydown);
 
   function closeMessage() {
-    window.removeEventListener('click', onClick);
-    window.removeEventListener('keydown', onKeydown);
+    window.removeEventListener('click', onButtonClick);
+    window.removeEventListener('keydown', onWindowKeydown);
     if (buttonElement) {
-      buttonElement.removeEventListener('click', onClick);
+      buttonElement.removeEventListener('click', onButtonClick);
     }
     messageElement.remove();
   }

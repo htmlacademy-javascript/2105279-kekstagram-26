@@ -25,11 +25,11 @@ const filterRandom = (data) => {
   return Array.from({ length: amount }, () => pictures.splice(Math.floor(Math.random() * pictures.length), 1)[0]);
 };
 
-function filterDiscussed(data) {
+const filterDiscussed = (data) => {
   const pictures = data.slice(0);
   pictures.sort((a, b) => b.comments.length - a.comments.length);
   return pictures;
-}
+};
 
 // Активировать форму фильтрации и вывод изображений
 const activateFilterForm = (onUpdate, data) => {

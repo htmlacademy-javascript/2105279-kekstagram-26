@@ -107,7 +107,7 @@ const applyEffect = (effect) => {
 applyEffect(EFFECT_DEFAULT);
 
 // Обработчики
-const onSlide = () => {
+const onSliderElementSlide = () => {
   const value = sliderElement.noUiSlider.get();
   effectLevelInputElement.value = value;
   switch (currentEffect) {
@@ -136,7 +136,7 @@ const onSlide = () => {
 
 const onEffectsRadioChange = (evt) => {
   applyEffect(evt.target.value);
-  onSlide();
+  onSliderElementSlide();
 };
 
 const onSmallerButtonClick = () => updateScale(currentScale - SCALE_STEP);
@@ -145,7 +145,7 @@ const onBiggerButtonClick = () => updateScale(currentScale + SCALE_STEP);
 
 // Добавление и удаление обработчиков
 const addEventEffect = () => {
-  sliderElement.noUiSlider.on('slide', onSlide);
+  sliderElement.noUiSlider.on('slide', onSliderElementSlide);
   effectsRadioElements.forEach((element) => element.addEventListener('change', onEffectsRadioChange));
   smallerButtonElement.addEventListener('click', onSmallerButtonClick);
   biggerButtonElement.addEventListener('click', onBiggerButtonClick);

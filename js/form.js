@@ -60,7 +60,7 @@ const onResetButtonClick = () => {
   resetEffects();
 };
 
-const onKeydownEscape = (evt) => {
+const onWindowKeydown = (evt) => {
   if (
     evt.key === 'Escape' &&
     evt.target !== hashtagInputElement &&
@@ -76,7 +76,7 @@ function showForm() {
   editFormElement.classList.remove('hidden');
   document.body.classList.add('.modal-open');
   resetButtonElement.addEventListener('click', onResetButtonClick);
-  window.addEventListener('keydown', onKeydownEscape);
+  window.addEventListener('keydown', onWindowKeydown);
   addEventEffect();
 }
 
@@ -85,7 +85,7 @@ function hideForm() {
   editFormElement.classList.add('hidden');
   document.body.classList.remove('.modal-open');
   resetButtonElement.removeEventListener('click', onResetButtonClick);
-  window.removeEventListener('keydown', onKeydownEscape);
+  window.removeEventListener('keydown', onWindowKeydown);
   removeEventEffect();
 }
 

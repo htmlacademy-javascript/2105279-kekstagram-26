@@ -21,20 +21,20 @@ const onLoadButtonClick = () => {
   }
 };
 
-const onClickReset = () => {
+const onResetButtonClick = () => {
   bigPictureElement.classList.add('hidden');
   document.body.classList.remove('.modal-open');
-  resetButtonElement.removeEventListener('click', onClickReset);
-  window.removeEventListener('keydown', onKeydownEscape);
+  resetButtonElement.removeEventListener('click', onResetButtonClick);
+  window.removeEventListener('keydown', onKeydownEscapeKeydown);
   loadButtonElement.removeEventListener('click', onLoadButtonClick);
   if (viewComment === commentElements.length) {
     loadButtonElement.classList.remove('hidden');
   }
 };
 
-function onKeydownEscape(evt) {
+function onKeydownEscapeKeydown(evt) {
   if (evt.key === 'Escape') {
-    onClickReset();
+    onResetButtonClick();
   }
 }
 
@@ -67,8 +67,8 @@ const showBigPicture = (picture) => {
 
   bigPictureElement.classList.remove('hidden');
   document.body.classList.add('.modal-open');
-  resetButtonElement.addEventListener('click', onClickReset);
-  window.addEventListener('keydown', onKeydownEscape);
+  resetButtonElement.addEventListener('click', onResetButtonClick);
+  window.addEventListener('keydown', onKeydownEscapeKeydown);
   loadButtonElement.addEventListener('click', onLoadButtonClick);
   onLoadButtonClick();
 };

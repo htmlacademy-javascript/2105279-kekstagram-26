@@ -1,8 +1,12 @@
-import { resetEffects, imgPreviewElement } from './effects.js';
+import { addEventEffect, removeEventEffect, resetEffects, imgPreviewElement } from './effects.js';
 import { sendData } from './net-api.js';
 import createMessage from './create-message.js';
+import isEscapeKey from './is-escape-key.js';
 
 const FILE_TYPES = ['bmp', 'gif', 'jpg', 'jpeg', 'png'];
+const MAX_LENGTH_HASHTAG = 20;
+const MIN_LENGTH_HASHTAG = 2;
+const MAX_AMOUNT_HASHTAG = 5;
 
 // Получение элементов формы
 const formElement = document.querySelector('.img-upload__form');
@@ -25,7 +29,7 @@ const pristine = new Pristine(formElement, {
 });
 
 // Валидация хештегов
-const regular = /^#[0-9A-Za-zА-Яа-яЁё]{1,19}$/;
+const regular = /^#[0-9A-Za-zА-Яа-яЁё]{0,19}$/;
 let errorHashtagMessage = '';
 
 const setErrorMessage = (condition, message) => {
@@ -35,57 +39,61 @@ const setErrorMessage = (condition, message) => {
   return !condition;
 };
 
+const verifyRepeat = (hashtags) => {
+  const noRepeatHashtags = new Set(hashtags.map((hashtag) => hashtag.toLowerCase()));
+  return noRepeatHashtags.size !== hashtags.length;
+};
+
 pristine.addValidator(hashtagInputElement, (value) => {
   let result = true;
   if (value.length) {
     const hashtags = value.split(' ').filter(({ length }) => length);
-    result &= setErrorMessage(hashtags.length > 5, 'Больше 5-ти хештегов нельзя.');
+    result &= setErrorMessage(hashtags.length > MAX_AMOUNT_HASHTAG, `Максимальное число хештегов: ${MAX_AMOUNT_HASHTAG}`);
+    result &= setErrorMessage(!hashtags.every(({ length }) => length > MIN_LENGTH_HASHTAG && length < MAX_LENGTH_HASHTAG), 'Хештег не должен быть пустым или длиннее 20 символов включая #');
     result &= setErrorMessage(!hashtags.every((hashtag) => regular.test(hashtag)), 'Хештег должен начинаться с # и состоять только из букв и чисел.');
-    result &= setErrorMessage(hashtags.every(({ length }) => length < 2 || length > 20), 'Хештег не должен быть пустым или длиннее 20 символов включая #');
+    result &= setErrorMessage(verifyRepeat(hashtags), 'Хештеги не должны повторятся');
   }
   return result;
 }, () => errorHashtagMessage);
 
-// Обработчики событий
-const onClickResetButton = () => {
+// Сбросить форму
+let hideForm = null;
+const onResetButtonClick = () => {
   hideForm();
-  resetForm();
+  formElement.reset();
+  pristine.reset();
+  resetEffects();
 };
 
-const onKeydownEscape = (evt) => {
+const onWindowKeydown = (evt) => {
   if (
-    evt.key === 'Escape' &&
+    isEscapeKey(evt) &&
     evt.target !== hashtagInputElement &&
     evt.target !== commentInputElement &&
     !document.querySelector('.error')
   ) {
-    hideForm();
-    resetForm();
+    onResetButtonClick();
   }
 };
 
 // Показать форму редактирования
-function showForm() {
+const showForm = () => {
   editFormElement.classList.remove('hidden');
   document.body.classList.add('.modal-open');
-  resetButtonElement.addEventListener('click', onClickResetButton);
-  window.addEventListener('keydown', onKeydownEscape);
-}
+  resetButtonElement.addEventListener('click', onResetButtonClick);
+  window.addEventListener('keydown', onWindowKeydown);
+  addEventEffect();
+};
 
 // Скрыть форму
-function hideForm() {
+hideForm = () => {
   editFormElement.classList.add('hidden');
   document.body.classList.remove('.modal-open');
-  resetButtonElement.removeEventListener('click', onClickResetButton);
-  window.removeEventListener('keydown', onKeydownEscape);
-}
+  resetButtonElement.removeEventListener('click', onResetButtonClick);
+  window.removeEventListener('keydown', onWindowKeydown);
+  removeEventEffect();
+};
 
-// Сбросить форму
-function resetForm() {
-  formElement.reset();
-  pristine.reset();
-  resetEffects();
-}
 
 /** Является ли файл допустимого типа*/
 const isImageFile = (file) => {
@@ -110,8 +118,7 @@ formElement.addEventListener('submit', (evt) => {
     disableSubmitButton();
     sendData(
       () => {
-        hideForm();
-        resetForm();
+        onResetButtonClick();
         enableSubmitButton();
         createMessage('#success');
       },

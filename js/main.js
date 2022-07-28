@@ -8,7 +8,7 @@ import './form.js';
 
 let pictureData;
 
-const onClickPreview = (evt) => {
+const onPictureClick = (evt) => {
   if (evt.target.tagName === 'IMG') {
     showBigPicture(pictureData[evt.target.parentElement.id]);
   }
@@ -18,7 +18,7 @@ const showPreviewPicture = (data) => {
   const fragment = document.createDocumentFragment();
   data.forEach((picture) => {
     const element = createPreviewElement(picture);
-    element.addEventListener('click', onClickPreview);
+    element.addEventListener('click', onPictureClick);
     fragment.append(element);
   });
   document.querySelector('.pictures').prepend(fragment);

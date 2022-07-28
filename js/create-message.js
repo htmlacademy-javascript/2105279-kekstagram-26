@@ -1,9 +1,14 @@
+import isEscapeKey from './is-escape-key.js';
+
+const getTemplateElement = (selector) => document.querySelector(selector).content.firstElementChild;
+let closeMessage = null;
+
 const createMessage = (selector, onSubmit = () => { }, onReject = () => { }) => {
-  const messageElement = document.querySelector(selector).content.firstElementChild.cloneNode(true);
+  const messageElement = getTemplateElement(selector).cloneNode(true);
   const buttonElement = messageElement.querySelector('button');
   document.body.append(messageElement);
 
-  const onClick = (evt) => {
+  const onButtonClick = (evt) => {
     closeMessage();
     if (evt.target === buttonElement) {
       onSubmit();
@@ -12,29 +17,30 @@ const createMessage = (selector, onSubmit = () => { }, onReject = () => { }) => 
     }
   };
 
-  const onKeydown = (evt) => {
+  const onWindowKeydown = (evt) => {
     evt.preventDefault();
-    if (evt.key === 'Escape') {
+    if (isEscapeKey(evt)) {
       closeMessage();
       onReject();
     }
   };
 
-  if (buttonElement) {
-    buttonElement.addEventListener('click', onClick);
-    buttonElement.focus();
-  }
-  window.addEventListener('click', onClick);
-  window.addEventListener('keydown', onKeydown);
-
-  function closeMessage() {
-    window.removeEventListener('click', onClick);
-    window.removeEventListener('keydown', onKeydown);
+  closeMessage = () => {
+    window.removeEventListener('click', onButtonClick);
+    window.removeEventListener('keydown', onWindowKeydown);
     if (buttonElement) {
-      buttonElement.removeEventListener('click', onClick);
+      buttonElement.removeEventListener('click', onButtonClick);
     }
     messageElement.remove();
+  };
+
+  if (buttonElement) {
+    buttonElement.addEventListener('click', onButtonClick);
+    buttonElement.focus();
   }
+  window.addEventListener('click', onButtonClick);
+  window.addEventListener('keydown', onWindowKeydown);
+
 };
 
 export default createMessage;

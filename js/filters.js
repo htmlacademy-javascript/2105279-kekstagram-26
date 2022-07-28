@@ -10,11 +10,13 @@ const sortButtonElement = document.querySelector('#filter-discussed');
 
 // Очистка страницы от прошлого вывода
 const removePreviewPicture = () => document.querySelectorAll('.picture').forEach((element) => element.remove());
+
+// Изменение стилей кнопок
+let oldActiveElement = defaultButtonElement;
 const updateStyleButton = (element) => {
-  defaultButtonElement.classList.remove('img-filters__button--active');
-  randomButtonElement.classList.remove('img-filters__button--active');
-  sortButtonElement.classList.remove('img-filters__button--active');
+  oldActiveElement.classList.remove('img-filters__button--active');
   element.classList.add('img-filters__button--active');
+  oldActiveElement = element;
 };
 
 // Фильтрация

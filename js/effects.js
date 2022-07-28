@@ -60,6 +60,7 @@ const smallerButtonElement = document.querySelector('.scale__control--smaller');
 const biggerButtonElement = document.querySelector('.scale__control--bigger');
 const scaleInputElement = document.querySelector('.scale__control--value');
 const effectLevelInputElement = document.querySelector('.effect-level__value');
+const effectLevelFieldsetElement = document.querySelector('.img-upload__effect-level');
 const imgPreviewElement = document.querySelector('.img-upload__preview img');
 const effectsRadioElements = document.querySelectorAll('.effects__radio');
 const sliderElement = document.querySelector('.effect-level__slider');
@@ -87,9 +88,9 @@ const applyEffect = (effect) => {
   imgPreviewElement.classList.remove(`effects__preview--${currentEffect}`);
   imgPreviewElement.style.filter = '';
   if (effect === EFFECT_DEFAULT) {
-    sliderElement.classList.add('visually-hidden');
+    effectLevelFieldsetElement.classList.add('hidden');
   } else {
-    sliderElement.classList.remove('visually-hidden');
+    effectLevelFieldsetElement.classList.remove('hidden');
     imgPreviewElement.classList.add(`effects__preview--${effect}`);
   }
   currentEffect = effect;

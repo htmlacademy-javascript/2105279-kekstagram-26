@@ -1,7 +1,7 @@
 
 import { getData } from './net-api.js';
 import createPreviewElement from './create-preview-element.js';
-import createMessage from './create-message.js';
+import { createMessage, Message } from './create-message.js';
 import showBigPicture from './big-picture.js';
 import { activateFilterForm } from './filters.js';
 import './form.js';
@@ -31,7 +31,7 @@ const loadData = () =>
       activateFilterForm(showPreviewPicture, data);
     },
     () => createMessage(
-      '#error_load',
+      Message.ERROR_LOAD,
       loadData
     ));
 

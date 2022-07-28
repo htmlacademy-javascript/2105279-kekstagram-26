@@ -1,6 +1,6 @@
 import { addEventEffect, removeEventEffect, resetEffects, imgPreviewElement } from './effects.js';
 import { sendData } from './net-api.js';
-import createMessage from './create-message.js';
+import { createMessage, Message } from './create-message.js';
 import isEscapeKey from './is-escape-key.js';
 
 const FILE_TYPES = ['bmp', 'gif', 'jpg', 'jpeg', 'png'];
@@ -18,8 +18,8 @@ const commentInputElement = document.querySelector('.text__description');
 const submitButtonElement = document.querySelector('#upload-submit');
 
 // Блокировка разблокировка кнопки отправки изображения
-const disableSubmitButton = () => submitButtonElement.removeAttribute('disable');
-const enableSubmitButton = () => submitButtonElement.setAttribute('disable', '');
+const disableSubmitButton = () => { submitButtonElement.disabled = true; };
+const enableSubmitButton = () => { submitButtonElement.disabled = false; };
 
 // Инициализация валидации с помощью библиотеки Pristine
 const pristine = new Pristine(formElement, {
@@ -49,7 +49,7 @@ pristine.addValidator(hashtagInputElement, (value) => {
   if (value.length) {
     const hashtags = value.split(' ').filter(({ length }) => length);
     result &= setErrorMessage(hashtags.length > MAX_AMOUNT_HASHTAG, `Максимальное число хештегов: ${MAX_AMOUNT_HASHTAG}`);
-    result &= setErrorMessage(!hashtags.every(({ length }) => length > MIN_LENGTH_HASHTAG && length < MAX_LENGTH_HASHTAG), 'Хештег не должен быть пустым или длиннее 20 символов включая #');
+    result &= setErrorMessage(!hashtags.every(({ length }) => length >= MIN_LENGTH_HASHTAG && length <= MAX_LENGTH_HASHTAG), 'Хештег не должен быть пустым или длиннее 20 символов включая #');
     result &= setErrorMessage(!hashtags.every((hashtag) => regular.test(hashtag)), 'Хештег должен начинаться с # и состоять только из букв и чисел.');
     result &= setErrorMessage(verifyRepeat(hashtags), 'Хештеги не должны повторятся');
   }
@@ -110,7 +110,6 @@ imgInputElement.addEventListener('change', () => {
   }
 });
 
-
 // Добавление события для отправки данных
 formElement.addEventListener('submit', (evt) => {
   evt.preventDefault();
@@ -120,12 +119,12 @@ formElement.addEventListener('submit', (evt) => {
       () => {
         onResetButtonClick();
         enableSubmitButton();
-        createMessage('#success');
+        createMessage(Message.SUCCESS);
       },
       () => {
         hideForm();
         enableSubmitButton();
-        createMessage('#error', showForm, showForm);
+        createMessage(Message.ERROR_UPLOAD, showForm, showForm);
       },
       new FormData(formElement)
     );

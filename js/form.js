@@ -1,6 +1,6 @@
 import { addEventEffect, removeEventEffect, resetEffects, imgPreviewElement } from './effects.js';
 import { sendData } from './net-api.js';
-import createMessage from './create-message.js';
+import { createMessage, Message } from './create-message.js';
 import isEscapeKey from './is-escape-key.js';
 
 const FILE_TYPES = ['bmp', 'gif', 'jpg', 'jpeg', 'png'];
@@ -110,7 +110,6 @@ imgInputElement.addEventListener('change', () => {
   }
 });
 
-
 // Добавление события для отправки данных
 formElement.addEventListener('submit', (evt) => {
   evt.preventDefault();
@@ -120,12 +119,12 @@ formElement.addEventListener('submit', (evt) => {
       () => {
         onResetButtonClick();
         enableSubmitButton();
-        createMessage('#success');
+        createMessage(Message.SUCCESS);
       },
       () => {
         hideForm();
         enableSubmitButton();
-        createMessage('#error', showForm, showForm);
+        createMessage(Message.ERROR_UPLOAD, showForm, showForm);
       },
       new FormData(formElement)
     );

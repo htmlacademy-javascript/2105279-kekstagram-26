@@ -1,10 +1,19 @@
 import isEscapeKey from './is-escape-key.js';
 
-const getTemplateElement = (selector) => document.querySelector(selector).content.firstElementChild;
-let closeMessage = null;
+const Message = {
+  ERROR_UPLOAD: '#error',
+  ERROR_LOAD: '#error_load',
+  SUCCESS: '#success'
+};
 
+const messageElements = [];
+for (const key in Message) {
+  messageElements[Message[key]] = document.querySelector(Message[key]).content.firstElementChild;
+}
+
+let closeMessage = null;
 const createMessage = (selector, onSubmit = () => { }, onReject = () => { }) => {
-  const messageElement = getTemplateElement(selector).cloneNode(true);
+  const messageElement = messageElements[selector].cloneNode(true);
   const buttonElement = messageElement.querySelector('button');
   document.body.append(messageElement);
 
@@ -43,4 +52,4 @@ const createMessage = (selector, onSubmit = () => { }, onReject = () => { }) => 
 
 };
 
-export default createMessage;
+export { createMessage, Message };
